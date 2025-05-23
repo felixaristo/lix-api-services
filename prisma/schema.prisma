@@ -8,21 +8,21 @@ datasource db {
 }
 
 model User {
-  id            Int      @id @default(autoincrement())
-  full_name     String   @db.VarChar(250)
-  email         String   @db.VarChar(100)
-  password      String   @db.VarChar(250)
-  phone         String   @db.VarChar(100)
-  address       String   @db.VarChar(250)
-  date_birth    DateTime 
-  gender        String   @db.VarChar(1)
-  city          String   @db.VarChar(100)
-  identity_card String   @db.VarChar(100)
-  degree        String   @db.VarChar(100)
-  institution   String   @db.VarChar(100)
-  is_deleted    Boolean  @default(false)
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+  id            Int       @id @default(autoincrement())
+  full_name     String    @db.VarChar(250)
+  email         String    @db.VarChar(100)
+  password      String    @db.VarChar(250)
+  phone         String?   @db.VarChar(100)
+  address       String?   @db.VarChar(250)
+  date_birth    DateTime? 
+  gender        String?   @db.VarChar(1)
+  city          String?   @db.VarChar(100)
+  identity_card String?   @db.VarChar(100)
+  degree        String?   @db.VarChar(100)
+  institution   String?   @db.VarChar(100)
+  is_deleted    Boolean?  @default(false)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @default(now())
   token         Tokenization?
 }
 
@@ -33,5 +33,5 @@ model Tokenization {
   access_token  String   @db.VarChar(250)
   refresh_token String   @db.VarChar(250)
   created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+  updated_at    DateTime @default(now())
 }

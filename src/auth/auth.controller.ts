@@ -4,6 +4,7 @@ import { BasicAuthGuard } from './guards/basic.guard';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { RolesGuard } from '../common/guards/roles.guard'
+import { LoginDto } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -11,14 +12,14 @@ export class AuthController {
 
     @UseGuards(BasicAuthGuard)
     @Post('login')
-    login(@Body() body: { username: string; password: string }) {
-        return this.authService.login(body.username, body.password);
+    login(@Body() dto: LoginDto) {
+        return this.authService.login(dto.email, dto.password);
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
     @Post('reset_password')
-    reset_password(@Body() body: { username: string; password: string }) {
-        return this.authService.login(body.username, body.password);
+    reset_password(@Body() payload: any) {
+        return this.authService.login(payload.username, payload.password);
     }
 }
