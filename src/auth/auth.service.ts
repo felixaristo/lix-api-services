@@ -27,11 +27,16 @@ export class AuthService {
                 roles: ['admin']
             }
 
+            let access_token = this.jwt.sign(userData)
+            let refresh_token = this.generateShortRefreshToken()
+
+            await this.saveTokenization(user.id, access_token, refresh_token)
+
             let data = { 
                 user: userData,
                 token: {
-                    access_token: this.jwt.sign(userData),
-                    refresh_token: this.generateShortRefreshToken()
+                    access_token: access_token,
+                    refresh_token: refresh_token
                 }
             }
             
@@ -55,7 +60,30 @@ export class AuthService {
         };
     }
 
-    
+    async saveTokenization(id_user: number, access_token: string, refresh_token: string){
+        let user = await this.prisma.tokenization.count({where: { id_user: id_user }})
+        if(user == 0){
+            await this.prisma.tokenization.create({
+                data: {
+                    id_user: id_user,
+                    access_token: access_token,
+                    refresh_token: refresh_token
+                }
+            })
+        }else{
+            await this.prisma.tokenization.update({
+                where:{
+                    id_user: id_user
+                },
+                data: {
+                    access_token: access_token,
+                    refresh_token: refresh_token,
+                    updated_at: new Date()
+                }
+            })
+        }
+        
+    }
 
     generateShortRefreshToken(){
         return randomBytes(16).toString('hex'); // 64 karakter hex
